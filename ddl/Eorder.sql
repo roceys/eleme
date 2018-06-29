@@ -1,13 +1,16 @@
 create table Discounts
 (
-	eid INTEGER,
+	eid INTEGER not null
+		primary key
+	autoincrement
+	unique,
 	category_id INT,
 	name VARCHAR,
 	price DOUBLE,
 	quantity INT,
 	unique_id BIGINT,
 	id VARCHAR,
-	update_timestamp TIMESTAMP default current_timestamp not null
+	update_timestamp TIMESTAMP default CURRENT_TIMESTAMP not null
 )
 ;
 
@@ -17,7 +20,10 @@ create unique index Discounts_eid_uindex
 
 create table Eorder
 (
-	eid INTEGER,
+	eid INTEGER not null
+		primary key
+	autoincrement
+	unique,
 	image_hash VARCHAR,
 	name VARCHAR,
 	price DOUBLE,
@@ -43,7 +49,7 @@ create table Eorder
 	packing_quantity DOUBLE,
 	packing_total_price DOUBLE,
 	deliver_price DOUBLE,
-	update_time TIMESTAMP default current_timestamp not null
+	update_time TIMESTAMP default CURRENT_TIMESTAMP not null
 )
 ;
 
