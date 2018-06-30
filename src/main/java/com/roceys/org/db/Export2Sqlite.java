@@ -1,10 +1,12 @@
 package com.roceys.org.db;
 
-import com.roceys.org.model.Orders;
+import com.roceys.org.model.DiscountDTO;
+import com.roceys.org.model.EOrdersDTO;
 import org.apache.commons.dbutils.QueryRunner;
 import org.sqlite.SQLiteDataSource;
 
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Export2Sqlite {
     private static SQLiteDataSource sqLiteDataSource;
@@ -64,13 +66,44 @@ public class Export2Sqlite {
             "                       'packing_total_price',\n" +
             "                       'deliver_price'\n" +
             "                   )";
+    private static final String SQL_DISCOUNTS = "INSERT INTO Discounts (\n" +
+            "                          category_id,\n" +
+            "                          name,\n" +
+            "                          price,\n" +
+            "                          quantity,\n" +
+            "                          unique_id,\n" +
+            "                          id\n" +
+            "                      )\n" +
+            "                      VALUES (\n" +
+            "                          'category_id',\n" +
+            "                          'name',\n" +
+            "                          'price',\n" +
+            "                          'quantity',\n" +
+            "                          'unique_id',\n" +
+            "                          'id'\n" +
+            "                      );\n";
 
-    public int insert(Orders orders) throws Exception {
+    public int insertDTO(EOrdersDTO eOrdersDTO, List<DiscountDTO> discountDTOList) throws Exception {
+        return this.insert(eOrdersDTO,discountDTOList);
+    }
+
+    public int insertObj(Object[] orders, Object[] discounts) throws Exception {
+       return this.insert(orders,discounts);
+    }
+
+    public int insert(Object orders, Object discounts) throws Exception {
         sqLiteDataSource = new SQLiteDataSource();
         sqLiteDataSource.setUrl(SQLITE_DB);
         queryRunner = new QueryRunner(sqLiteDataSource);
         //Statement statement = sqLiteDataSource.getConnection().createStatement();
         //return statement.executeUpdate(SQL_ELEME_ORDER);
-        return queryRunner.update(SQL_ELEME_ORDER);
+        int result = 0;
+        int o = queryRunner.update(SQL_ELEME_ORDER, orders);
+        if (o != 0) {
+            result += o;
+            int d = queryRunner.update(SQL_DISCOUNTS, discounts);
+            result += d;
+        }
+        return result;
     }
 }
