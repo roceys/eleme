@@ -83,15 +83,17 @@ public class Export2Sqlite {
             "                          'id'\n" +
             "                      );\n";
 
+/*
     public int insertDTO(EOrdersDTO eOrdersDTO, List<DiscountDTO> discountDTOList) throws Exception {
         return this.insert(eOrdersDTO,discountDTOList);
     }
+*/
 
-    public int insertObj(Object[] orders, Object[] discounts) throws Exception {
+ /*   public int insertObj(Object[] orders, Object[] discounts) throws Exception {
        return this.insert(orders,discounts);
-    }
+    }*/
 
-    public int insert(Object orders, Object discounts) throws Exception {
+    public int insert(Object orders, List<Object> discounts) throws Exception {
         sqLiteDataSource = new SQLiteDataSource();
         sqLiteDataSource.setUrl(SQLITE_DB);
         queryRunner = new QueryRunner(sqLiteDataSource);
@@ -99,10 +101,12 @@ public class Export2Sqlite {
         //return statement.executeUpdate(SQL_ELEME_ORDER);
         int result = 0;
         int o = queryRunner.update(SQL_ELEME_ORDER, orders);
-        if (o != 0) {
+        if (o != 0 && discounts.size() > 0) {
             result += o;
-            int d = queryRunner.update(SQL_DISCOUNTS, discounts);
-            result += d;
+            for (Object obj : discounts) {
+                int d = queryRunner.update(SQL_DISCOUNTS, obj);
+                result += d;
+            }
         }
         return result;
     }
