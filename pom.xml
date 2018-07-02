@@ -51,5 +51,11 @@
             <artifactId>webmagic-extension</artifactId>
             <version>0.7.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
